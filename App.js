@@ -5,7 +5,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text>Another piece of text</Text>
-      <Text>Hello world</Text>
+      <Text style={styles.text}>Hello world</Text>
       <Button title="Tap me" />
     </View>
   );
@@ -17,5 +17,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  text: {
+    margin: 10,
+    borderWidth: 1,
+    padding: 5,
+    borderRadius: 5,
+    borderColor: "#ff00ff",
   },
 });
