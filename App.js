@@ -8,7 +8,8 @@ import {
 } from "react-native";
 import * as Notifications from "expo-notifications";
 import { useEffect, useState } from "react";
-import Icon from "react-native-vector-icons/FontAwesome";
+
+import GoalItem from "./components/GoalItem/app";
 
 export default function App() {
   const [value, setValue] = useState("");
@@ -43,10 +44,16 @@ export default function App() {
         <FlatList
           style={styles.goalsContent}
           data={goals}
-          renderItem={(itemData) => {
+          renderItem={(itemData, index) => {
             return (
               <View style={styles.goalContet} key={itemData.index}>
-                <Text
+                <GoalItem
+                  item={itemData.item}
+                  deleteGoal={deleteGoal}
+                  index={index}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+                {/*  <Text
                   style={{
                     color: "black",
                     fontSize: 20,
@@ -61,7 +68,7 @@ export default function App() {
                   style={{ color: "#ff0000" }}
                   size={30}
                   onPress={() => deleteGoal(itemData.index)}
-                />
+                /> */}
               </View>
             );
           }}
@@ -95,17 +102,10 @@ const styles = StyleSheet.create({
     width: "70%",
     padding: 10,
   },
+
   goalsContent: {
     marginTop: 10,
     gap: 5,
     overflow: "scroll",
-  },
-  goalContet: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: "#c6c6c6",
-    alignItems: "center",
-    padding: 10,
-    marginTop: 5,
   },
 });
