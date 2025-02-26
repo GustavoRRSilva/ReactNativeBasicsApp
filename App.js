@@ -1,5 +1,11 @@
-import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  FlatList,
+} from "react-native";
 import * as Notifications from "expo-notifications";
 import { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -14,7 +20,7 @@ export default function App() {
     setGoals(newGoals);
   };
   const handleAdd = (e) => {
-    setGoals((prevGoals) => [...prevGoals, value]); // Add the new goal to the list
+    setGoals((prevGoals) => [...prevGoals, { text: value }]); // Add the new goal to the list
     setValue(""); // Clear input after adding the goal
   };
 
@@ -34,12 +40,13 @@ export default function App() {
         <Button title="Add goals" onPress={handleAdd} style={styles.button} />
       </View>
       <View>
-        <View style={styles.goalsContent}>
-          {goals.length > 0 ? (
-            goals.map((goal, index) => (
-              <View style={styles.goalContet}>
+        <FlatList
+          style={styles.goalsContent}
+          data={goals}
+          renderItem={(itemData) => {
+            return (
+              <View style={styles.goalContet} key={itemData.index}>
                 <Text
-                  key={index}
                   style={{
                     color: "black",
                     fontSize: 20,
@@ -47,20 +54,19 @@ export default function App() {
                     borderRadius: 5,
                   }}
                 >
-                  {goal}
+                  {itemData.item.text}
                 </Text>
                 <Icon
                   name="trash"
                   style={{ color: "#ff0000" }}
                   size={30}
-                  onPress={() => deleteGoal(index)}
+                  onPress={() => deleteGoal(itemData.index)}
                 />
               </View>
-            ))
-          ) : (
-            <Text>List of goalss...</Text>
-          )}
-        </View>
+            );
+          }}
+          alwaysBounceVertical={false}
+        ></FlatList>
       </View>
     </View>
   );
@@ -92,6 +98,7 @@ const styles = StyleSheet.create({
   goalsContent: {
     marginTop: 10,
     gap: 5,
+    overflow: "scroll",
   },
   goalContet: {
     flexDirection: "row",
@@ -99,5 +106,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#c6c6c6",
     alignItems: "center",
     padding: 10,
+    marginTop: 5,
   },
 });
