@@ -9,20 +9,21 @@ import {
 import * as Notifications from "expo-notifications";
 import { useEffect, useState } from "react";
 
-import GoalItem from "./components/GoalItem/app";
+import GoalItem from "./components/GoalItem/app.js";
+import GoalInput from "./components/GoalInput/app.js";
 
 export default function App() {
   const [value, setValue] = useState("");
   const [goals, setGoals] = useState([]);
-
+  const [isOpen, setIsOpen] = useState(false);
   const deleteGoal = (index) => {
     let newGoals = [...goals];
     newGoals.splice(index, 1);
     setGoals(newGoals);
   };
-  const handleAdd = (e) => {
-    setGoals((prevGoals) => [...prevGoals, { text: value }]); // Add the new goal to the list
-    setValue(""); // Clear input after adding the goal
+  const handleAdd = (value) => {
+    setGoals((prevGoals) => [...prevGoals, { text: value }]);
+    setValue("");
   };
 
   useEffect(() => {
@@ -31,16 +32,17 @@ export default function App() {
 
   return (
     <View style={styles.mainContent}>
-      <View style={styles.newContainer}>
-        <TextInput
-          placeholder="Your course goal"
-          style={styles.input}
-          value={value}
-          onChangeText={(text) => setValue(text)}
-        />
-        <Button title="Add goals" onPress={handleAdd} style={styles.button} />
-      </View>
       <View>
+        <Button
+          title="Add a new task"
+          color="#c6a"
+          onPress={() => setIsOpen(true)}
+        />
+        <GoalInput
+          handleAdd={handleAdd}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+        />
         <FlatList
           style={styles.goalsContent}
           data={goals}
@@ -86,16 +88,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     flex: 1,
   },
-  newContainer: {
-    flexDirection: "row",
-    justifyContent: "space",
-    marginTop: 10,
-    gap: 10,
-    alignItems: "center",
-    paddingVertical: 20,
-    borderBottomWidth: 2,
-    borderBottomColor: "black",
-  },
+
   input: {
     borderColor: "#000",
     borderWidth: 1,
